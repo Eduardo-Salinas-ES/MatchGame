@@ -26,6 +26,7 @@ namespace MatchGame
         int tenthsOfSecondsElapsed;
         int matchesFound;
 
+        // Function to initialize components and start game
         public MainWindow()
         {
             InitializeComponent();
@@ -73,23 +74,23 @@ namespace MatchGame
             // random will be used to generate a random number
             Random random = new Random();
 
-            // Find every TextBlock in the main grid and repeat the following
-            // for each of them.
+            // This funciton creates a new arrangement of emojis on our grid every new game
             foreach(TextBlock textBlock in mainGrid.Children.OfType<TextBlock>())
             {
                 if (textBlock.Name != "timeTextBlock")
                 {
-                    // index will pick a random number between 0 and the number of emojis left
-                    // in the list
+                    // Index will pick a random number between 0 and the number of emojis left
+                    // in the list. Here this will be 0 - 16.
                     int index = random.Next(foodEmoji.Count);
 
-                    // Next emoji will be chosen from the food emoji list at that ranom index
+                    // Next emoji will be set to the emoji at the random index
                     string nextEmoji = foodEmoji[index];
 
-                    // The next text block will be changed to the new emoji
+                    // The current text block will be set to the new emoji
                     textBlock.Text = nextEmoji;
 
-                    // Remove random emoji from the list
+                    // Remove random emoji from the list so we can place another
+                    // in the next location.
                     foodEmoji.RemoveAt(index);
                 }
                 //else, it does just skip it and loop again
@@ -113,20 +114,28 @@ namespace MatchGame
             TextBlock textBlock = sender as TextBlock;
             if (findingMatch == false)
             {
+                // Clicking on initial block will make it disapear
                 textBlock.Visibility = Visibility.Hidden;
+                // Last block is set to the current block.
                 lastTextBlockClicked = textBlock;
+                // Set true, to find a match for current
                 findingMatch = true;
             }
+            // If we click on the next image and it matches the last image
             else if (textBlock.Text == lastTextBlockClicked.Text)
             {
                 // Increase matches found, when pairs are made
                 matchesFound++;
+                // Hide the image that was matched
                 textBlock.Visibility = Visibility.Hidden;
                 findingMatch = false;
             }
+            // Else, the image does not match, make the previous match visible
             else
             {
                 lastTextBlockClicked.Visibility = Visibility.Visible;
+                // Reset finding match condition to start looking for matching 
+                // pairs again.
                 findingMatch = false;
             }
 
